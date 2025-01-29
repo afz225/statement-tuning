@@ -1,0 +1,8 @@
+,model,shot,SPC,PPC,excluded,dataset,Mean,std,speed
+0,roberta-base,0,20000,5,"samsum,wikilingua,offensive,massive,dpr,yelp_polarity,mintaka,squad,qasc,sciq,race",amazon_p,0.5592,0.05545448584199478,157.01242556294386
+1,roberta-base,0,20000,5,"samsum,wikilingua,offensive,massive,dpr,yelp_polarity,mintaka,squad,qasc,sciq,race",copa,0.5024,0.01705285899783378,516.8281824224849
+2,roberta-base,0,20000,5,"samsum,wikilingua,offensive,massive,dpr,yelp_polarity,mintaka,squad,qasc,sciq,race",emotion,0.07189999999999999,0.027727242920997392,121.27198834050417
+3,roberta-base,0,20000,5,"samsum,wikilingua,offensive,massive,dpr,yelp_polarity,mintaka,squad,qasc,sciq,race",figqa,0.5093235831809872,0.016722859238249496,529.036882099909
+4,roberta-base,0,20000,5,"samsum,wikilingua,offensive,massive,dpr,yelp_polarity,mintaka,squad,qasc,sciq,race",mrpc,0.40591304347826085,0.08502037760605145,708.8548296045999
+5,roberta-base,0,20000,5,"samsum,wikilingua,offensive,massive,dpr,yelp_polarity,mintaka,squad,qasc,sciq,race",storycloze,0.5024793388429751,0.06570117988215467,413.28216110991497
+6,roberta-base,0,20000,5,"samsum,wikilingua,offensive,massive,dpr,yelp_polarity,mintaka,squad,qasc,sciq,race",yahoo,0.038400000000000004,0.017601136326953443,220.15415660740365

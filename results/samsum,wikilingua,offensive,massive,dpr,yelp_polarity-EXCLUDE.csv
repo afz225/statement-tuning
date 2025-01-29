@@ -1,0 +1,8 @@
+,model,shot,SPC,PPC,excluded,dataset,Mean,std,speed
+0,roberta-base,0,15000,5,"samsum,wikilingua,offensive,massive,dpr,yelp_polarity",amazon_p,0.6482,0.12037524662487716,156.5235183493292
+1,roberta-base,0,15000,5,"samsum,wikilingua,offensive,massive,dpr,yelp_polarity",copa,0.6983999999999999,0.012198360545581535,505.9001805662339
+2,roberta-base,0,15000,5,"samsum,wikilingua,offensive,massive,dpr,yelp_polarity",emotion,0.5101,0.02213707297724794,119.52154166291571
+3,roberta-base,0,15000,5,"samsum,wikilingua,offensive,massive,dpr,yelp_polarity",figqa,0.5749542961608776,0.0027422303473491616,517.7874401397254
+4,roberta-base,0,15000,5,"samsum,wikilingua,offensive,massive,dpr,yelp_polarity",mrpc,0.717449275362319,0.02507405540730038,706.1620069945369
+5,roberta-base,0,15000,5,"samsum,wikilingua,offensive,massive,dpr,yelp_polarity",storycloze,0.5956611570247933,0.10143607613920003,406.18645850581225
+6,roberta-base,0,15000,5,"samsum,wikilingua,offensive,massive,dpr,yelp_polarity",yahoo,0.255,0.03334666400106612,216.2304524158652

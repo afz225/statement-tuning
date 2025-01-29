@@ -1,0 +1,27 @@
+# Ignore trained models
+models/*
+outputs/* 
+
+# Ignore wandb
+wandb/
+
+# Ignore build
+build/
+
+checkpoints/
+
+data/
+
+slurm*
+
+# Ignore all ipynb checkpoints
+.ipynb_checkpoints
+
+
+*.pdf
+
+./*.csv
+
+Untitled.ipynb
+
+*.txt

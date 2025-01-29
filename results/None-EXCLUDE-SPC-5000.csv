@@ -1,0 +1,8 @@
+,model,shot,SPC,PPC,excluded,dataset,Mean,std,speed
+0,roberta-base,0,5000,5,None,amazon_p,0.915,,156.05363674053402
+1,roberta-base,0,5000,5,None,copa,0.724,,550.0182670461177
+2,roberta-base,0,5000,5,None,emotion,0.507,,129.11305121057927
+3,roberta-base,0,5000,5,None,figqa,0.613345521023766,,569.2953084241667
+4,roberta-base,0,5000,5,None,mrpc,0.6591304347826087,,698.465979782721
+5,roberta-base,0,5000,5,None,storycloze,0.8419421487603306,,449.1029273366904
+6,roberta-base,0,5000,5,None,yahoo,0.407,,234.0364649564853

@@ -1,0 +1,8 @@
+,model,shot,SPC,PPC,excluded,dataset,Mean,std,speed
+0,roberta-base,0,5000,5,"samsum,wikilingua",amazon_p,0.92,,99.74527322171693
+1,roberta-base,0,5000,5,"samsum,wikilingua",copa,0.736,,507.6002607283596
+2,roberta-base,0,5000,5,"samsum,wikilingua",emotion,0.504,,125.51545850580479
+3,roberta-base,0,5000,5,"samsum,wikilingua",figqa,0.6106032906764168,,567.6134719500958
+4,roberta-base,0,5000,5,"samsum,wikilingua",mrpc,0.7194202898550724,,682.9348557206285
+5,roberta-base,0,5000,5,"samsum,wikilingua",storycloze,0.7592975206611571,,459.99116654453366
+6,roberta-base,0,5000,5,"samsum,wikilingua",yahoo,0.407,,234.29748397569094
