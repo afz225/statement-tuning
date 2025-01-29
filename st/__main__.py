@@ -46,6 +46,12 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Path to directory output results file for evaluation.",
     )
     parser.add_argument(
+        "--shuffle",
+        action="store_true",
+        default=False,
+        help="If True, shuffle the words during evaluation.",
+    )
+    parser.add_argument(
         "--n_runs",
         type=int,
         default=5,
@@ -107,7 +113,7 @@ def setup_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--cache_dir",
         type=str,
-        default=None,
+        default='~',
         metavar="DIR",
         help="A path to hugging face cache.",
     )
@@ -275,6 +281,7 @@ def main(args: Union[argparse.Namespace, None] = None) -> None:
                         batch_size=args.batch_size, 
                         cache_dir=args.cache_dir, 
                         n_shot=0,
+                        shuffled=args.shuffle,
                     )
                     runs.append(data_accuracies)
                     speeds.append(run_speeds)
@@ -296,7 +303,7 @@ def main(args: Union[argparse.Namespace, None] = None) -> None:
         
         results = pd.concat(results, ignore_index=True)
         agg_results = pd.concat([results.groupby(['model', 'shot', 'SPC', 'PPC', 'excluded', 'dataset'])['Mean'].mean().reset_index(), results.groupby(['model', 'shot', 'SPC', 'PPC', 'excluded', 'dataset'])['std'].agg(agg_std).reset_index()['std'], results.groupby(['model', 'shot', 'SPC', 'PPC', 'excluded', 'dataset'])['speed'].mean().reset_index()['speed']], axis=1)
-        results_save_path = os.path.join(dirname, args.results, args.experiment_name+".csv")
+        results_save_path = os.path.join(dirname, args.results, args.experiment_name+ "-shuffled" if args.shuffle else "" +".csv")
         agg_results.to_csv(results_save_path)
         # print(agg_results)
         # df = pd.DataFrame(runs)

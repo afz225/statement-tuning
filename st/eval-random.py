@@ -317,11 +317,12 @@ def compute_accuracy_emotion(model,tokenizer, device,temp, cache_dir, clf_metric
     torch.cuda.empty_cache()
     return clf_metrics.compute(predictions=predictions, references=actual_labels)['accuracy']
     
-def run_eval(tokenizer, model, batch_size, cache_dir, n_shot='full'):
+def run_eval(tokenizer, model, batch_size, cache_dir, shuffled=False, n_shot='full'):
     
     data_accuracies = {}
     speed = {}
-    
+    global shuffle
+    shuffle=shuffled
     dataset = "pkavumba/balanced-copa"
     templates = [["The cause of \"${1}\" is that \"${2}\"", "\"${1}\" because \"${2}\"", "\"${1}\" due to \"${2}\""], ["The effect of \"${1}\" is that \"${2}\"", "\"${1}\" therefore \"${2}\"", "\"${1}\", so \"${2}\""]]
     split = ['train', 'test']

@@ -25,3 +25,6 @@ slurm*
 Untitled.ipynb
 
 *.txt
+
+*.e*
+*.o*

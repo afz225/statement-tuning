@@ -8,6 +8,7 @@ from torch.utils.data import DataLoader
 import pandas as pd
 from datasets import Dataset
 import evaluate
+import random
 import copy
 from sklearn.utils import resample
 import time
@@ -15,10 +16,22 @@ from transformers import AdamW, get_linear_schedule_with_warmup
 from torch.nn import CrossEntropyLoss
 from sklearn.model_selection import train_test_split
 
+
+def shuffle_words(s):
+    # Split the string into a list of words
+    words = s.split()
+    # Use random.shuffle to shuffle the list of words
+    random.shuffle(words)
+    # Join the shuffled list back into a string
+    return ' '.join(words)
+
 def fill_template(templates, values):
     temp = random.sample(templates,1)[0]
     for i in range(len(values)):
-        temp = temp.replace("${"+str(i+1)+"}", values[i])
+        if shuffle:
+            temp = temp.replace("${"+str(i+1)+"}", shuffle_words(values[i]))
+        else:
+            temp = temp.replace("${"+str(i+1)+"}", values[i])
     return temp
 
 def measure_time(func):
@@ -308,10 +321,13 @@ def compute_accuracy_emotion(model,tokenizer, device,temp, cache_dir, clf_metric
     torch.cuda.empty_cache()
     return clf_metrics.compute(predictions=predictions, references=actual_labels)['accuracy']
     
-def run_eval(tokenizer, model, batch_size, cache_dir, n_shot='full'):
+def run_eval(tokenizer, model, batch_size, cache_dir, shuffled=False, n_shot='full'):
     
     data_accuracies = {}
     speed = {}
+
+    global shuffle
+    shuffle=shuffled
     
     dataset = "pkavumba/balanced-copa"
     templates = [["The cause of \"${1}\" is that \"${2}\"", "\"${1}\" because \"${2}\"", "\"${1}\" due to \"${2}\""], ["The effect of \"${1}\" is that \"${2}\"", "\"${1}\" therefore \"${2}\"", "\"${1}\", so \"${2}\""]]
