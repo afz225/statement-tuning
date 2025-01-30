@@ -15,6 +15,7 @@ import time
 from transformers import AdamW, get_linear_schedule_with_warmup
 from torch.nn import CrossEntropyLoss
 from sklearn.model_selection import train_test_split
+from datetime import datetime
 
 
 def shuffle_words(s):
@@ -292,7 +293,7 @@ def compute_accuracy_emotion(model,tokenizer, device,temp, cache_dir, clf_metric
     dataset = ["dair-ai/emotion"]
     templates = ["\"${1}\". The emotion conveyed in the text is ${2}", "Text: \"${1}\". Emotion: ${2}", "The text \"${1}\" is ${2}"]
     split = ['test']
-    data = load_dataset(*dataset, split=split, cache_dir='/scratch/afz225/.cache')
+    data = load_dataset(*dataset, split=split, cache_dir=cache_dir)
     emotions = data[0].features['label'].names
     label_column = 'label'
     col_names = copy.copy(data[0].column_names)
@@ -358,7 +359,10 @@ def run_eval(tokenizer, model, batch_size, cache_dir, shuffled=False, n_shot='fu
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
     
-    clf_metrics = evaluate.combine(["accuracy"])
+    current_time = datetime.now()
+    formatted_time = current_time.strftime('%H:%M:%S')
+
+    clf_metrics = evaluate.load('accuracy', experiment_id=formatted_time)
 
     if n_shot != 0:
         train_dataloader = DataLoader(train, batch_size=batch_size)

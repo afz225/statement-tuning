@@ -245,7 +245,7 @@ def main(args: Union[argparse.Namespace, None] = None) -> None:
             
                 results = pd.concat(results, ignore_index=True)
                 agg_results = pd.concat([results.groupby(['model', 'shot', 'SPC', 'PPC', 'excluded', 'dataset'])['Mean'].mean().reset_index(), results.groupby(['model', 'shot', 'SPC', 'PPC', 'excluded', 'dataset'])['std'].agg(agg_std).reset_index()['std'], results.groupby(['model', 'shot', 'SPC', 'PPC', 'excluded', 'dataset'])['speed'].mean().reset_index()['speed']], axis=1)
-                results_save_path = os.path.join(dirname, args.results, args.experiment_name+".csv")
+                results_save_path = os.path.join(dirname, args.results, args.experiment_name, ("-shuffled.csv" if args.shuffle else ".csv"))
                 agg_results.to_csv(results_save_path)
             
 
@@ -264,7 +264,9 @@ def main(args: Union[argparse.Namespace, None] = None) -> None:
         #         n_shot=32,
         #     ))
         results = []
+        print('[LOG] Begin Evaluation')
         for i in range(args.n_runs):
+            print(f'[LOG] Run {i}')
             model_path = os.path.join(dirname, args.model_save_path, args.experiment_name+f"-{i}")
             model = AutoModelForSequenceClassification.from_pretrained(model_path, cache_dir=args.cache_dir)
             tokenizer = AutoTokenizer.from_pretrained(model_path)
@@ -275,6 +277,7 @@ def main(args: Union[argparse.Namespace, None] = None) -> None:
                 runs = []
                 speeds = []
                 for j in range (args.n_runs):
+                    print(f'[LOG] Shot {shot} Run {j}')
                     run_speeds, data_accuracies = run_eval(
                         tokenizer=tokenizer, 
                         model=model, 
@@ -300,10 +303,11 @@ def main(args: Union[argparse.Namespace, None] = None) -> None:
                 result_df['excluded'] = "None" if args.exclude is None else args.exclude
                 
                 results.append(result_df)    
-        
+        print('[LOG] Evaluation Complete')
         results = pd.concat(results, ignore_index=True)
         agg_results = pd.concat([results.groupby(['model', 'shot', 'SPC', 'PPC', 'excluded', 'dataset'])['Mean'].mean().reset_index(), results.groupby(['model', 'shot', 'SPC', 'PPC', 'excluded', 'dataset'])['std'].agg(agg_std).reset_index()['std'], results.groupby(['model', 'shot', 'SPC', 'PPC', 'excluded', 'dataset'])['speed'].mean().reset_index()['speed']], axis=1)
-        results_save_path = os.path.join(dirname, args.results, args.experiment_name+ "-shuffled" if args.shuffle else "" +".csv")
+        results_save_path = os.path.join(dirname, args.results, (args.experiment_name +"-shuffled.csv" if args.shuffle else  args.experiment_name +".csv"))
+        print(f'[LOG] Saving results to {results_save_path}')
         agg_results.to_csv(results_save_path)
         # print(agg_results)
         # df = pd.DataFrame(runs)
