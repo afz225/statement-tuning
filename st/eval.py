@@ -322,7 +322,7 @@ def compute_accuracy_emotion(model,tokenizer, device,temp, cache_dir, clf_metric
     torch.cuda.empty_cache()
     return clf_metrics.compute(predictions=predictions, references=actual_labels)['accuracy']
     
-def run_eval(tokenizer, model, batch_size, cache_dir, shuffled=False, n_shot='full'):
+def run_eval(tokenizer, model, batch_size, cache_dir, shuffled=False, seed=42, n_shot='full'):
     
     data_accuracies = {}
     speed = {}
@@ -351,7 +351,7 @@ def run_eval(tokenizer, model, batch_size, cache_dir, shuffled=False, n_shot='fu
 
     train = copa_statements[0]
     if n_shot > 0 and n_shot != 'full':
-        train = Dataset.from_dict(train_test_split(train.to_pandas(), train_size=min(n_shot, len(train)-2), stratify=train['label'])[0])
+        train = Dataset.from_dict(train_test_split(train.to_pandas(), train_size=min(n_shot, len(train)-2), stratify=train['label'])[0], random_state=seed)
     test = copa_statements[1]
 
     n_examples = len(test)
@@ -390,7 +390,7 @@ def run_eval(tokenizer, model, batch_size, cache_dir, shuffled=False, n_shot='fu
 
     train = mrpc_statements[0]
     if n_shot > 0 and n_shot != 'full':
-        train = Dataset.from_dict(train_test_split(train.to_pandas(), train_size=min(n_shot, len(train)-2), stratify=train['label'])[0])
+        train = Dataset.from_dict(train_test_split(train.to_pandas(), train_size=min(n_shot, len(train)-2), stratify=train['label'], random_state=seed)[0])
     test = mrpc_statements[1]
     n_examples = len(test)
     
@@ -429,7 +429,7 @@ def run_eval(tokenizer, model, batch_size, cache_dir, shuffled=False, n_shot='fu
     
     train = amazon_statements[0]
     if n_shot > 0 and n_shot != 'full':
-        train = Dataset.from_dict(train_test_split(train.to_pandas(), train_size=min(n_shot, len(train)-2), stratify=train['label'])[0])
+        train = Dataset.from_dict(train_test_split(train.to_pandas(), train_size=min(n_shot, len(train)-2), stratify=train['label'], random_state=seed)[0])
     test = amazon_statements[1]
     n_examples = len(test)
     
@@ -462,7 +462,7 @@ def run_eval(tokenizer, model, batch_size, cache_dir, shuffled=False, n_shot='fu
 
     train = figqa_statements[0]
     if n_shot > 0 and n_shot != 'full':
-        train = Dataset.from_dict(train_test_split(train.to_pandas(), train_size=min(n_shot, len(train)-2), stratify=train['label'])[0])
+        train = Dataset.from_dict(train_test_split(train.to_pandas(), train_size=min(n_shot, len(train)-2), stratify=train['label'], random_state=seed)[0])
     test = figqa_statements[1]
     n_examples = len(test)
     
@@ -494,7 +494,7 @@ def run_eval(tokenizer, model, batch_size, cache_dir, shuffled=False, n_shot='fu
             example['label'] = example[label_column]-1
             return example
         storycloze_statements = [split.map(create_statements_labels_storycloze, remove_columns=col_names) for split in data][0]
-        train, test = train_test_split(storycloze_statements.to_pandas(), train_size=32, stratify=storycloze_statements['label'])
+        train, test = train_test_split(storycloze_statements.to_pandas(), train_size=32, stratify=storycloze_statements['label'], random_state=seed)
         train = Dataset.from_dict(train)
         test = Dataset.from_dict(test)
         n_examples = len(test)
@@ -523,10 +523,10 @@ def run_eval(tokenizer, model, batch_size, cache_dir, shuffled=False, n_shot='fu
 
         if n_shot > 0:
             train = yahoo_dataset['train']
-            train = Dataset.from_dict(train_test_split(train.to_pandas(), train_size=min(n_shot, len(train)-2), stratify=train['topic'])[0])
+            train = Dataset.from_dict(train_test_split(train.to_pandas(), train_size=min(n_shot, len(train)-2), stratify=train['topic'])[0], random_state=seed)
             train = train.map(create_statements_labels_yahoo, remove_columns=['topic', 'question_title', 'question_content', 'id', 'best_answer'],batched=True).filter(lambda example: len(tokenizer(example['statement'])['input_ids']) < 514)
         test = yahoo_dataset['test']
-        test = Dataset.from_dict(train_test_split(test.to_pandas(), train_size=min(2000, len(test)-2), stratify=test['topic'])[0])
+        test = Dataset.from_dict(train_test_split(test.to_pandas(), train_size=min(2000, len(test)-2), stratify=test['topic'])[0], random_state=seed)
 
         test = test.map(create_statements_labels_yahoo, remove_columns=['topic', 'question_title', 'question_content', 'id', 'best_answer'],batched=True).filter(lambda example: len(tokenizer(example['statement'])['input_ids']) < 514)
         n_examples = len(test)
@@ -554,10 +554,10 @@ def run_eval(tokenizer, model, batch_size, cache_dir, shuffled=False, n_shot='fu
 
         if n_shot > 0:
             train = emotion_dataset['train']
-            train = Dataset.from_dict(train_test_split(train.to_pandas(), train_size=min(n_shot, len(train)-2), stratify=train['label'])[0])
+            train = Dataset.from_dict(train_test_split(train.to_pandas(), train_size=min(n_shot, len(train)-2), stratify=train['label'])[0], random_state=seed)
             train = train.map(create_statements_labels_emotion, remove_columns=['text'],batched=True).filter(lambda example: len(tokenizer(example['statement'])['input_ids']) < 514)
         test = emotion_dataset['test']
-        test = Dataset.from_dict(train_test_split(test.to_pandas(), train_size=min(2000, len(test)-6), stratify=test['label'])[0])
+        test = Dataset.from_dict(train_test_split(test.to_pandas(), train_size=min(2000, len(test)-6), stratify=test['label'])[0], random_state=seed)
 
         test = test.map(create_statements_labels_emotion, remove_columns=['text'],batched=True).filter(lambda example: len(tokenizer(example['statement'])['input_ids']) < 514)
         n_examples = len(test)

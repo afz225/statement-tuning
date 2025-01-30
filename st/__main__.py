@@ -139,6 +139,12 @@ def setup_parser() -> argparse.ArgumentParser:
         help="Device to use (e.g. cuda, cuda:0, cpu).",
     )
     parser.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Random seed for n-shot evaluation.",
+    )
+    parser.add_argument(
         "--skip_eval",
         action="store_true",
         default=False,
@@ -223,6 +229,8 @@ def main(args: Union[argparse.Namespace, None] = None) -> None:
                             batch_size=args.batch_size, 
                             cache_dir=args.cache_dir, 
                             n_shot=0,
+                            seed=args.seed,
+                            shuffled=args.shuffle,
                         )
                         runs.append(data_accuracies)
                         speeds.append(run_speeds)
@@ -284,6 +292,7 @@ def main(args: Union[argparse.Namespace, None] = None) -> None:
                         batch_size=args.batch_size, 
                         cache_dir=args.cache_dir, 
                         n_shot=0,
+                        seed=args.seed,
                         shuffled=args.shuffle,
                     )
                     runs.append(data_accuracies)
